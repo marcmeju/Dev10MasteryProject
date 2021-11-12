@@ -51,7 +51,7 @@ public class ReservationFileRepository implements ReservationRepository {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return result;
     }
@@ -87,8 +87,8 @@ public class ReservationFileRepository implements ReservationRepository {
         nextId += 1;
         reservation.setId(nextId);
 
+            all.add(reservation);
 
-        all.add(reservation);
         writeAll(all, host.getId());
 
         return reservation;
@@ -139,7 +139,7 @@ public class ReservationFileRepository implements ReservationRepository {
                 writer.println(serialize(reservation));
             }
         } catch (FileNotFoundException ex) {
-            throw new DataException(ex);
+//            throw new DataException(ex);
         }
     }
 

@@ -1,4 +1,4 @@
-package learn.DontWreckMyHouse.domain;
+package learn.DontWreckMyHouse.data;
 
 import learn.DontWreckMyHouse.data.DataException;
 import learn.DontWreckMyHouse.data.HostRepository;
@@ -10,28 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HostFileRepositoryDouble implements HostRepository {
-    private final String filepath;
-    public HostFileRepositoryDouble(String filepath){this.filepath = filepath;}
 
+    public HostFileRepositoryDouble(){
+Host host = new Host();
+
+host.setId("3edda6bc-ab95-49a8-8962-d50b53f84b15");
+host.setEmail("eyearnes0@sfgate.com");
+host.setPhone("8061783815");
+host.setAddress("3 Nova Trail");
+host.setCity("Amarillo");
+host.setState("TX");
+host.setPostalCode(79182);
+host.setStandardRate(new BigDecimal(340));
+host.setWeekendRate(new BigDecimal(425));
+hosts.add(host);
+
+    }
+    private ArrayList<Host> hosts = new ArrayList<>();
     private static final String HEADER = "id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
 
     @Override
     public List<Host> findAll()  {
-        ArrayList<Host> result = new ArrayList<>();
-        try(BufferedReader reader = new BufferedReader(new FileReader(filepath))){
+        return new ArrayList<>(hosts);
 
-            reader.readLine();
-
-            for(String line = reader.readLine(); line != null; line = reader.readLine()){
-                String[] fields = line.split(",", -1);
-                if(fields.length == 10){
-                    result.add(deserialize(fields));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     @Override
@@ -84,7 +85,7 @@ return result;
     }
 
     private void writeAll(List<Host> hosts) throws DataException {
-        try(PrintWriter writer = new PrintWriter(filepath)){
+        try(PrintWriter writer = new PrintWriter("./data/reservations-test/empty.csv")){
 
             writer.println(HEADER);
 
