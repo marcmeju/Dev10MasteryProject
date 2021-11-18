@@ -4,6 +4,8 @@ import learn.DontWreckMyHouse.models.Guest;
 import learn.DontWreckMyHouse.models.Host;
 import learn.DontWreckMyHouse.models.Reservation;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class View {
@@ -73,13 +75,14 @@ public class View {
             return;
         }
 
+        io.println("=".repeat(20));
+        io.println("Reservations Found: ");
+
         for(Reservation reservation: reservations){
-            io.println("=".repeat(20));
-            io.println("Reservations Found: ");
             io.printf("ID: %s, Start_date: %s, End_date: %s, Guest_Id: %s, Total: %s%n", reservation.getId(), reservation.getStartDate(), reservation.getEndDate(), reservation.getGuestId(), reservation.getTotal());
-            io.println("=".repeat(20));
             //id,start_date,end_date,guest_id,total
         }
+        io.println("=".repeat(20));
     }
 
 
@@ -87,12 +90,12 @@ public class View {
     //************************** CRUD METHODS ***************************
     //********************************************************************
 
-    //************************ View Reservations *************************
+    //************************ VIEW RESERVATIONS *************************
     public String seeReservations() {
         return io.readRequiredString("Enter Host Email: "); //can add do, while string is not of a certain format
     }
 
-    //************************ Make a Reservation **************************
+    //************************ MAKE A RESERVATION **************************
     public Reservation makeReservation() {
         Reservation reservation = new Reservation(); //remvove arguments above
         reservation.setStartDate(io.readLocalDate("Enter Start Date [MM/dd/yyyy]: "));
@@ -110,33 +113,49 @@ public class View {
         return io.readRequiredString("Enter Guest Email Here: ");
     }
 
+    int res_ID = 0;
     public int returnReservationID() {
-        return io.readInt("Enter Reservation ID: ");
+        res_ID = io.readInt("Enter Reservation ID: ");
+        return res_ID;
     }
 
-    //************************ Update a Reservation **************************
+    //************************ UPDATE A RESERVATION **************************
     public Reservation updateReservation() {
         return makeReservation();
     }
-    //************************ Cancel a Reservation **************************
 
-    public boolean displayReservation(Reservation reservation) {
+    //************************ CANCEL A RESERVATION **************************
+
+    public void displayReservation(Reservation reservation) {
 
         if(reservation == null){
             io.println("No reservation found.");
-            return false;
+            return;
         } else {
             io.println("=".repeat(20));
             io.println("Reservation: ");
             io.printf("ID: %s, Start_date: %s, End_date: %s, Guest_Id: %s, Total: %s%n", reservation.getId(), reservation.getStartDate(), reservation.getEndDate(), reservation.getGuestId(), reservation.getTotal());
 //            io.println("=".repeat(20));
             //id,start_date,end_date,guest_id,total
-          return io.readBoolean("Are you sure you want to cancel this reservation? : [y / n]: " );
+//          return io.readBoolean("Are you sure you want to cancel this reservation? : [y / n]: " );
 
         }
 
     }
-//    public Reservation cancelReservation(Reservation toBeCancelled) {
-//
-//    }
+
+    public boolean deleteOrNot(){
+        return io.readBoolean("Are you sure you want to cancel reservation "  + res_ID + "?  : [y / n]: "  );
+
+    }
+
+    public boolean proceedOrNot(Reservation reservation, BigDecimal total) {
+        io.println("=".repeat(20));
+        io.println("Your reservation details are as follows: ");
+        io.println("*".repeat(3));
+        io.printf("Start Date: %s %nEnd Date: %s %nTotal: %s", reservation.getStartDate(),reservation.getEndDate(),total.setScale(2, RoundingMode.CEILING));
+        io.println("");
+        io.println("*".repeat(3));
+        return io.readBoolean("Do you want to proceed with this reservation? [y / n]: ");
+
+    }
 }

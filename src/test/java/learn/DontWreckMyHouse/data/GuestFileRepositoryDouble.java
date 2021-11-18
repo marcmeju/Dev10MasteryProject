@@ -1,4 +1,4 @@
-package learn.DontWreckMyHouse.domain;
+package learn.DontWreckMyHouse.data;
 
 import learn.DontWreckMyHouse.data.DataException;
 import learn.DontWreckMyHouse.data.GuestRepository;
@@ -12,31 +12,27 @@ import java.util.List;
 
 public class GuestFileRepositoryDouble implements GuestRepository {
 
-    private final String filepath;
 
-    public GuestFileRepositoryDouble(String filepath) {
-        this.filepath = filepath;
+
+    public GuestFileRepositoryDouble() {
+        Guest guest = new Guest();
+        guest.setGuestID(1);
+        guest.setLastName("Lomas");
+        guest.setFirstName("Sullivan");
+        guest.setEmail("slomas0@mediafire.com");
+        guest.setPhone("7027768761");
+        guest.setState("NV");
+
+        guests.add(guest);
+
     }
-
+private ArrayList<Guest> guests = new ArrayList<>();
     private static final String HEADER = "guest_id,first_name,last_name,email,phone,state";
 
     @Override
     public List<Guest> findAll() {
-        ArrayList<Guest> result = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
 
-            reader.readLine();
-
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                String[] fields = line.split(",", -1);
-                if (fields.length == 6) {
-                    result.add(deserialize(fields));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return new ArrayList<>(guests);
     }
 
     @Override
